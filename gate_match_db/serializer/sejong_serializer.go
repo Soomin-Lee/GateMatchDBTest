@@ -2,7 +2,7 @@ package serializer
 
 type SejongFeatureDBNew struct {
 	Emp_no        string
-	FeatureVector []float32
+	FeatureVector [512]float32
 }
 
 type SejongEmpInfo struct {

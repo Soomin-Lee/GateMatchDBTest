@@ -1,5 +1,7 @@
 package interactor
 
 type IFeatureInteractor interface {
-	CreateFeatureDBRow(interface{}) (interface{}, error)
+	Create(interface{}) error
+	Delete(interface{}) error
+	GetList(interface{}) ([]interface{}, error)
 }

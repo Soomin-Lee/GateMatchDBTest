@@ -8,7 +8,7 @@ import (
 
 var SejongFeatureMigrations = []*gormigrate.Migration{
 	{
-		ID: "202012021100",
+		ID: "202012031100",
 		Migrate: func(tx *gorm.DB) (err error) {
 			featuredb := new(entity.FeatureDBNew)
 			tx.LogMode(true)
