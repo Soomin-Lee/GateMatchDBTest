@@ -81,7 +81,7 @@ func (hi *HRInfoInteractor) Find(reqData interface{}) ([]interface{}, error) {
 	case serializer.SejongEmpInfo:
 		fdata, ok := reqData.(serializer.SejongEmpInfo)
 		if !ok {
-			return errors.New("Type Error")
+			return nil, errors.New("Type Error")
 		} else {
 			entityFind := &entity.EmpInfo{}
 			entityFind.Emp_no = fdata.Emp_no
@@ -101,7 +101,6 @@ func (hi *HRInfoInteractor) Find(reqData interface{}) ([]interface{}, error) {
 	}
 
 	return retData, nil
-}
 }
 
 func (hi *HRInfoInteractor) GetList(reqData interface{}) ([]interface{}, error) {
