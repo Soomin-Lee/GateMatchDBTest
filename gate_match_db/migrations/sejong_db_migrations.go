@@ -26,4 +26,31 @@ var SejongFeatureMigrations = []*gormigrate.Migration{
 			return
 		},
 	},
+	{
+		ID: "202012031500",
+		Migrate: func(tx *gorm.DB) (err error) {
+			featuredb := new(entity.FeatureDBNew)
+			infodb := new(entity.EmpInfo)
+			tx.LogMode(true)
+
+			err = tx.AutoMigrate(featuredb, infodb).Error
+			if err != nil {
+				return
+			}
+			tx.LogMode(false)
+
+			return
+		},
+		Rollback: func(tx *gorm.DB) (err error) {
+			featuredb := new(entity.FeatureDBNew)
+			infodb := new(entity.EmpInfo)
+			tx.LogMode(true)
+
+			err = tx.DropTableIfExists(featuredb, infodb).Error
+			if err != nil {
+				return
+			}
+			return
+		},
+	},
 }
