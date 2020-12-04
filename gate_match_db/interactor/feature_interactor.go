@@ -19,12 +19,12 @@ func NewFeatureInteractor(r repository.IFeatureRepository) IFeatureInteractor {
 
 func (fi *FeatureInteractor) Create(reqData interface{}) error {
 	switch reqData.(type) {
-	case serializer.SejongFeatureDBNew:
-		fdata, ok := reqData.(serializer.SejongFeatureDBNew)
+	case serializer.FeatureDB:
+		fdata, ok := reqData.(serializer.FeatureDB)
 		if !ok {
 			return errors.New("Type Error")
 		} else {
-			entityCreate := &entity.FeatureDBNew{}
+			entityCreate := &entity.FeatureDB{}
 			entityCreate.Emp_no = fdata.Emp_no
 			var featureVector [512]float32
 			copy(featureVector[:], fdata.FeatureVector[:512])
@@ -35,9 +35,6 @@ func (fi *FeatureInteractor) Create(reqData interface{}) error {
 				return err
 			}
 		}
-	case serializer.ParadiseFeatureDB:
-		// Paradise DB에 맞춰 적용
-		break
 	default:
 		return errors.New("Type Error")
 	}
@@ -47,20 +44,18 @@ func (fi *FeatureInteractor) Create(reqData interface{}) error {
 
 func (fi *FeatureInteractor) Delete(reqData interface{}) error {
 	switch reqData.(type) {
-	case serializer.SejongFeatureDBNew:
-		fdata, ok := reqData.(serializer.SejongFeatureDBNew)
+	case serializer.FeatureDB:
+		fdata, ok := reqData.(serializer.FeatureDB)
 		if !ok {
 			return errors.New("Type Error")
 		} else {
-			entityDelete := &entity.FeatureDBNew{}
+			entityDelete := &entity.FeatureDB{}
 			entityDelete.Emp_no = fdata.Emp_no
 			err := fi.FeatureRepository.Delete(entityDelete)
 			if err != nil {
 				return err
 			}
 		}
-	case serializer.ParadiseFeatureDB:
-		break
 	default:
 		return errors.New("Type Error")
 	}
@@ -72,8 +67,8 @@ func (fi *FeatureInteractor) GetList(reqData interface{}) ([]interface{}, error)
 	var retData []interface{}
 
 	switch reqData.(type) {
-	case serializer.SejongFeatureDBNew:
-		entityFind := &entity.FeatureDBNew{}
+	case serializer.FeatureDB:
+		entityFind := &entity.FeatureDB{}
 		featureList, err := fi.FeatureRepository.GetList(entityFind)
 		if err != nil {
 			return nil, err
@@ -82,8 +77,6 @@ func (fi *FeatureInteractor) GetList(reqData interface{}) ([]interface{}, error)
 		for idx := range featureList {
 			retData[idx] = featureList[idx]
 		}
-	case serializer.ParadiseFeatureDB:
-		break
 	default:
 		return nil, errors.New("Type Error")
 	}

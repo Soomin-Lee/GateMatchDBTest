@@ -1,4 +1,4 @@
-package repository_sejong
+package repository
 
 import (
 	"errors"
@@ -7,7 +7,6 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"github.com/AlcheraInc/gate_match_db/entity"
-	"github.com/AlcheraInc/gate_match_db/repository"
 	"github.com/AlcheraInc/gate_match_db/serializer"
 	"github.com/AlcheraInc/go/utils"
 )
@@ -16,12 +15,12 @@ type FeatureRepository struct {
 	db *gorm.DB
 }
 
-func NewFeatureRepository(db *gorm.DB) repository.IFeatureRepository {
+func NewFeatureRepository(db *gorm.DB) IFeatureRepository {
 	return &FeatureRepository{db}
 }
 
 func (fr *FeatureRepository) Create(data interface{}) error {
-	newFeature, ok := data.(*entity.FeatureDBNew)
+	newFeature, ok := data.(*entity.FeatureDB)
 	if !ok {
 		return errors.New("Type error")
 	}
@@ -37,13 +36,13 @@ func (fr *FeatureRepository) Create(data interface{}) error {
 }
 
 func (fr *FeatureRepository) Delete(data interface{}) error {
-	delFeature, ok := data.(*entity.FeatureDBNew)
+	delFeature, ok := data.(*entity.FeatureDB)
 	if !ok {
 		return errors.New("Type error")
 	}
 
 	// Delete row in DB
-	err := fr.db.Model(&delFeature).Where("emp_no=?", delFeature.Emp_no).Delete(&delFeature).Error
+	err := fr.db.Model(&delFeature).Where("name=?", delFeature.Name).Delete(&delFeature).Error
 	if err != nil {
 		log.Fatalln(err)
 		return err
@@ -52,14 +51,14 @@ func (fr *FeatureRepository) Delete(data interface{}) error {
 	return nil
 }
 
-func (fr *FeatureRepository) GetList(data interface{}) ([]serializer.SejongFeatureDBNew, error) {
-	listFeature, ok := data.(*entity.FeatureDBNew)
+func (fr *FeatureRepository) GetList(data interface{}) ([]interface{}, error) {
+	listFeature, ok := data.(*entity.FeatureDB)
 	if !ok {
 		return nil, errors.New("Type error")
 	}
 
 	// Delete row in DB
-	var foundFeatures []entity.FeatureDBNew
+	var foundFeatures []entity.FeatureDB
 
 	err := fr.db.Model(&listFeature).Find(&foundFeatures).Error
 	if err != nil {
@@ -67,13 +66,13 @@ func (fr *FeatureRepository) GetList(data interface{}) ([]serializer.SejongFeatu
 		return nil, err
 	}
 
-	var retFeatures []serializer.SejongFeatureDBNew
+	var retFeatures []serializer.FeatureDB
 	for idx := range foundFeatures {
-		featureEmpNo := foundFeatures[idx].Emp_no
+		featureName := foundFeatures[idx].Name
 		featureBytes := foundFeatures[idx].FeatureBlob
 		featureVector := utils.ByteSliceAsFloat32Slice(featureBytes, len(featureBytes))
-		retFeature := serializer.SejongFeatureDBNew{
-			Emp_no:        featureEmpNo,
+		retFeature := serializer.FeatureDB{
+			Name:          featureName,
 			FeatureVector: featureVector,
 		}
 		retFeatures = append(retFeatures, retFeature)
