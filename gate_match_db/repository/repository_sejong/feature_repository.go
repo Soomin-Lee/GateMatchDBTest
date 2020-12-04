@@ -27,7 +27,7 @@ func (fr *FeatureRepository) Create(data interface{}) error {
 	}
 
 	// Create new row in DB
-	err := fr.db.Create(&newFeature).Error
+	err := fr.db.Model(&newFeature).Create(&newFeature).Error
 	if err != nil {
 		log.Fatalln(err)
 		return err
@@ -43,7 +43,7 @@ func (fr *FeatureRepository) Delete(data interface{}) error {
 	}
 
 	// Delete row in DB
-	err := fr.db.Where("emp_no=?", delFeature.Emp_no).Delete(&delFeature).Error
+	err := fr.db.Model(&delFeature).Where("emp_no=?", delFeature.Emp_no).Delete(&delFeature).Error
 	if err != nil {
 		log.Fatalln(err)
 		return err
@@ -53,7 +53,7 @@ func (fr *FeatureRepository) Delete(data interface{}) error {
 }
 
 func (fr *FeatureRepository) GetList(data interface{}) ([]serializer.SejongFeatureDBNew, error) {
-	_, ok := data.(*entity.FeatureDBNew)
+	listFeature, ok := data.(*entity.FeatureDBNew)
 	if !ok {
 		return nil, errors.New("Type error")
 	}
@@ -61,7 +61,7 @@ func (fr *FeatureRepository) GetList(data interface{}) ([]serializer.SejongFeatu
 	// Delete row in DB
 	var foundFeatures []entity.FeatureDBNew
 
-	err := fr.db.Find(&foundFeatures).Error
+	err := fr.db.Model(&listFeature).Find(&foundFeatures).Error
 	if err != nil {
 		log.Fatalln(err)
 		return nil, err
