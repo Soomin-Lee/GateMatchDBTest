@@ -53,20 +53,35 @@ func main() {
 		return
 	}
 
-	log.Println("Phase 1")
-	showMemoryDB(featureDB.MemoryDB)
-
 	fv := make([]float32, 512)
 	for i := range fv {
 		fv[i] = 0.5
 	}
-	err = featureDB.CreateFeatureRow("Soomin1", fv)
+	// err = featureDB.CreateFeatureRow("Soomin1", fv)
+	// err = featureDB.CreateFeatureRow("Soomin1", fv)
+	// err = featureDB.CreateFeatureRow("Soomin2", fv)
+	// err = featureDB.CreateFeatureRow("Soomin2", fv)
+	// err = featureDB.CreateFeatureRow("Soomin3", fv)
+	// err = featureDB.CreateFeatureRow("Soomin3", fv)
+	// err = featureDB.CreateFeatureRow("Soomin3", fv)
+	// err = featureDB.CreateFeatureRow("Soomin4", fv)
+	// err = featureDB.CreateFeatureRow("Soomin4", fv)
+	// err = featureDB.CreateFeatureRow("Soomin4", fv)
+	// if err != nil {
+	// 	log.Println(err)
+	// 	return
+	// }
+
+	log.Println("Phase 2")
+	showMemoryDB(featureDB.MemoryDB)
+
+	err = featureDB.DeleteFeatureRow("Soomin2")
 	if err != nil {
 		log.Println(err)
 		return
 	}
 
-	log.Println("Phase 2")
+	log.Println("Phase 3")
 	showMemoryDB(featureDB.MemoryDB)
 
 	// for idx := range fr {
@@ -82,8 +97,9 @@ func main() {
 }
 
 func showMemoryDB(db []feature_db.FeatureRow) {
+	log.Println(len(db))
 	for idx := range db {
-		log.Println(db[idx].UID)
+		log.Println("WOW", db[idx].UID)
 	}
 }
 

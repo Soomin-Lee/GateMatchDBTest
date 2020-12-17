@@ -71,7 +71,7 @@ func (fi *FeatureDB) LoadFeatureDB() error {
 		return err
 	}
 
-	fi.MemoryDB = make([]FeatureRow, len(featureList))
+	fi.MemoryDB = make([]FeatureRow, 0)
 
 	for idx := range featureList {
 		featureUID := featureList[idx].UID
@@ -107,5 +107,9 @@ func (fi *FeatureDB) DeleteFeatureRowsFromMemoryDB(uids []int) {
 	}
 	for idx := range uids {
 		fi.MemoryDB = removeElem(fi.MemoryDB, uids[idx])
+		// sub 1 to remain indices
+		for subIdx := idx + 1; subIdx < len(uids); subIdx++ {
+			uids[subIdx]--
+		}
 	}
 }
