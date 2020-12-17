@@ -7,8 +7,6 @@ import (
 	"github.com/jinzhu/gorm"
 
 	"github.com/AlcheraInc/gate_match_db/entity"
-	"github.com/AlcheraInc/gate_match_db/serializer"
-	"github.com/AlcheraInc/go/utils"
 )
 
 type FeatureRepository struct {
@@ -20,7 +18,7 @@ func NewFeatureRepository(db *gorm.DB) IFeatureRepository {
 }
 
 func (fr *FeatureRepository) Create(data interface{}) error {
-	newFeature, ok := data.(*entity.FeatureDB)
+	newFeature, ok := data.(*entity.FeatureRow)
 	if !ok {
 		return errors.New("Type error")
 	}
@@ -36,13 +34,13 @@ func (fr *FeatureRepository) Create(data interface{}) error {
 }
 
 func (fr *FeatureRepository) Delete(data interface{}) error {
-	delFeature, ok := data.(*entity.FeatureDB)
+	delFeature, ok := data.(*entity.FeatureRow)
 	if !ok {
 		return errors.New("Type error")
 	}
 
 	// Delete row in DB
-	err := fr.db.Model(&delFeature).Where("name=?", delFeature.Name).Delete(&delFeature).Error
+	err := fr.db.Model(&delFeature).Where("uid=?", delFeature.UID).Delete(&delFeature).Error
 	if err != nil {
 		log.Fatalln(err)
 		return err
@@ -51,14 +49,43 @@ func (fr *FeatureRepository) Delete(data interface{}) error {
 	return nil
 }
 
-func (fr *FeatureRepository) GetList(data interface{}) ([]interface{}, error) {
-	listFeature, ok := data.(*entity.FeatureDB)
+func (fr *FeatureRepository) Find(data interface{}) ([]entity.FeatureRow, error) {
+	findFeature, ok := data.(*entity.FeatureRow)
 	if !ok {
 		return nil, errors.New("Type error")
 	}
 
-	// Delete row in DB
-	var foundFeatures []entity.FeatureDB
+	// Find row in DB
+	var foundFeatures []entity.FeatureRow
+
+	err := fr.db.Model(&findFeature).Where("uid=?", findFeature.UID).Find(&foundFeatures).Error
+	if err != nil {
+		log.Fatalln(err)
+		return nil, err
+	}
+
+	// var retFeatures []serializer.FeatureDB
+	// for idx := range foundFeatures {
+	// 	featureName := foundFeatures[idx].Name
+	// 	featureBytes := foundFeatures[idx].FeatureBlob
+	// 	featureVector := utils.ByteSliceAsFloat32Slice(featureBytes, len(featureBytes))
+	// 	retFeature := serializer.FeatureDB{
+	// 		Name:          featureName,
+	// 		FeatureVector: featureVector,
+	// 	}
+	// 	retFeatures = append(retFeatures, retFeature)
+	// }
+
+	return foundFeatures, nil
+}
+
+func (fr *FeatureRepository) GetList(data interface{}) ([]entity.FeatureRow, error) {
+	listFeature, ok := data.(*entity.FeatureRow)
+	if !ok {
+		return nil, errors.New("Type error")
+	}
+
+	var foundFeatures []entity.FeatureRow
 
 	err := fr.db.Model(&listFeature).Find(&foundFeatures).Error
 	if err != nil {
@@ -66,17 +93,19 @@ func (fr *FeatureRepository) GetList(data interface{}) ([]interface{}, error) {
 		return nil, err
 	}
 
-	var retFeatures []serializer.FeatureDB
-	for idx := range foundFeatures {
-		featureName := foundFeatures[idx].Name
-		featureBytes := foundFeatures[idx].FeatureBlob
-		featureVector := utils.ByteSliceAsFloat32Slice(featureBytes, len(featureBytes))
-		retFeature := serializer.FeatureDB{
-			Name:          featureName,
-			FeatureVector: featureVector,
-		}
-		retFeatures = append(retFeatures, retFeature)
-	}
+	return foundFeatures, nil
 
-	return retFeatures, nil
+	// var retFeatures []serializer.FeatureDB
+	// for idx := range foundFeatures {
+	// 	featureName := foundFeatures[idx].Name
+	// 	featureBytes := foundFeatures[idx].FeatureBlob
+	// 	featureVector := utils.ByteSliceAsFloat32Slice(featureBytes, len(featureBytes))
+	// 	retFeature := serializer.FeatureDB{
+	// 		Name:          featureName,
+	// 		FeatureVector: featureVector,
+	// 	}
+	// 	retFeatures = append(retFeatures, retFeature)
+	// }
+
+	// return retFeatures, nil
 }

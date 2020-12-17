@@ -6,9 +6,9 @@ import (
 	"strconv"
 
 	"github.com/AlcheraInc/gate_match_db/database_manager"
+	"github.com/AlcheraInc/gate_match_db/feature_db"
 	"github.com/AlcheraInc/gate_match_db/migrations"
 	"github.com/AlcheraInc/gate_match_db/registry"
-	"github.com/AlcheraInc/gate_match_db/serializer"
 	"github.com/jinzhu/gorm"
 )
 
@@ -21,9 +21,9 @@ func main() {
 		return
 	}
 
-	registry := registry.NewRegistrySejong(db)
+	registry := registry.NewRegistry(db)
 	featureRepository := registry.NewFeatureRepository()
-	featureInteractor := registry.NewFeatureInteractor(featureRepository)
+	featureDB := registry.NewFeatureDB(featureRepository)
 
 	// newFeatureRow := serializer.SejongFeatureDBNew{}
 	// newFeatureRow.Emp_no = "Soomin5"
@@ -47,25 +47,44 @@ func main() {
 	// 	return
 	// }
 
-	featureList := []serializer.SejongFeatureDBNew{}
-	fr, err := featureInteractor.GetList(serializer.SejongFeatureDBNew{})
-
-	log.Println(len(fr))
-
-	for idx := range fr {
-		feature, _ := fr[idx].(serializer.SejongFeatureDBNew)
-		featureList = append(featureList, feature)
-		// nf := serializer.SejongFeatureDBNew{
-		// Emp_no:        (string)(elements.Field(0).Interface()),
-		// FeatureVector: elements.Field(1).Interface(),
-		// }
+	err = featureDB.LoadFeatureDB()
+	if err != nil {
+		log.Println(err)
+		return
 	}
 
-	for idx := range featureList {
-		log.Println(idx, featureList[idx])
+	log.Println("Phase 1")
+	showMemoryDB(featureDB.MemoryDB)
+
+	fv := make([]float32, 512)
+	for i := range fv {
+		fv[i] = 0.5
 	}
+	err = featureDB.CreateFeatureRow("Soomin1", fv)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println("Phase 2")
+	showMemoryDB(featureDB.MemoryDB)
+
+	// for idx := range fr {
+	// 	feature, _ := fr[idx].(serializer.SejongFeatureDBNew)
+	// 	featureList = append(featureList, feature)
+	// 	// nf := serializer.SejongFeatureDBNew{
+	// 	// Emp_no:        (string)(elements.Field(0).Interface()),
+	// 	// FeatureVector: elements.Field(1).Interface(),
+	// 	// }
+	// }
 
 	return
+}
+
+func showMemoryDB(db []feature_db.FeatureRow) {
+	for idx := range db {
+		log.Println(db[idx].UID)
+	}
 }
 
 func newDatabaseConnection() (db *gorm.DB, err error) {
@@ -84,6 +103,6 @@ func newDatabaseConnection() (db *gorm.DB, err error) {
 		return
 	}
 
-	err = dbManager.Migrate(migrations.SejongFeatureMigrations)
+	err = dbManager.Migrate(migrations.FeatureDBMigrations)
 	return
 }

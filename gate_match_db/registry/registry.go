@@ -1,7 +1,7 @@
 package registry
 
 import (
-	"github.com/AlcheraInc/gate_match_db/interactor"
+	"github.com/AlcheraInc/gate_match_db/feature_db"
 	"github.com/AlcheraInc/gate_match_db/repository"
 	"github.com/jinzhu/gorm"
 )
@@ -18,6 +18,6 @@ func (r *Registry) NewFeatureRepository() repository.IFeatureRepository {
 	return repository.NewFeatureRepository(r.db)
 }
 
-func (r *Registry) NewFeatureInteractor(rfr repository.IFeatureRepository) interactor.IFeatureInteractor {
-	return interactor.NewFeatureInteractor(rfr)
+func (r *Registry) NewFeatureDB(rfr repository.IFeatureRepository) feature_db.FeatureDB {
+	return feature_db.NewFeatureDB(rfr)
 }

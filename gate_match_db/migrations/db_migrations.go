@@ -8,9 +8,9 @@ import (
 
 var FeatureDBMigrations = []*gormigrate.Migration{
 	{
-		ID: "202012041100",
+		ID: "202012171500",
 		Migrate: func(tx *gorm.DB) (err error) {
-			featuredb := new(entity.FeatureDB)
+			featuredb := new(entity.FeatureRow)
 			tx.LogMode(true)
 
 			err = tx.AutoMigrate(featuredb).Error
@@ -19,7 +19,7 @@ var FeatureDBMigrations = []*gormigrate.Migration{
 			return
 		},
 		Rollback: func(tx *gorm.DB) (err error) {
-			featuredb := new(entity.FeatureDB)
+			featuredb := new(entity.FeatureRow)
 			tx.LogMode(true)
 
 			err = tx.DropTableIfExists(featuredb).Error
