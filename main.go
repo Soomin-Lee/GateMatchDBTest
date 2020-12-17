@@ -53,10 +53,18 @@ func main() {
 		return
 	}
 
-	fv := make([]float32, 512)
-	for i := range fv {
-		fv[i] = 0.5
-	}
+	// for i := 0; i < 10; i++ {
+	// 	fv := make([]float32, 512)
+	// 	for k := range fv {
+	// 		fv[k] = 0.1 * float32(i)
+	// 	}
+	// 	err = featureDB.CreateFeatureRow("Soomin"+strconv.Itoa(i), fv)
+	// 	if err != nil {
+	// 		log.Println(err)
+	// 		return
+	// 	}
+	// }
+
 	// err = featureDB.CreateFeatureRow("Soomin1", fv)
 	// err = featureDB.CreateFeatureRow("Soomin1", fv)
 	// err = featureDB.CreateFeatureRow("Soomin2", fv)
@@ -75,14 +83,36 @@ func main() {
 	log.Println("Phase 2")
 	showMemoryDB(featureDB.MemoryDB)
 
-	err = featureDB.DeleteFeatureRow("Soomin2")
+	fv := make([]float32, 512)
+	for k := range fv {
+		fv[k] = 0.5
+	}
+
+	// err = featureDB.DeleteFeatureRow("Soomin2")
+	// if err != nil {
+	// 	log.Println(err)
+	// 	return
+	// }
+
+	// log.Println("Phase 3")
+	// showMemoryDB(featureDB.MemoryDB)
+
+	// matchResult, err := featureDB.MatchFeature(fv, 0.2)
+	// if err != nil {
+	// 	log.Println(err)
+	// 	return
+	// }
+	// log.Println("UID :", matchResult.UID)
+	// log.Println("Distance :", matchResult.Distance)
+
+	matchResult, passedResults, err := featureDB.MatchFeatureAll(fv, 0.2)
 	if err != nil {
 		log.Println(err)
 		return
 	}
-
-	log.Println("Phase 3")
-	showMemoryDB(featureDB.MemoryDB)
+	log.Println("UID :", matchResult.UID)
+	log.Println("Distance :", matchResult.Distance)
+	log.Println("Passed Count :", len(passedResults))
 
 	// for idx := range fr {
 	// 	feature, _ := fr[idx].(serializer.SejongFeatureDBNew)
@@ -99,7 +129,11 @@ func main() {
 func showMemoryDB(db []feature_db.FeatureRow) {
 	log.Println(len(db))
 	for idx := range db {
-		log.Println("WOW", db[idx].UID)
+		log.Println("UID :", db[idx].UID)
+		// for i := 0; i < 512; i++ {
+		// 	fmt.Print(db[idx].FeatureVector[i], " ")
+		// }
+		// fmt.Println()
 	}
 }
 
