@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"strconv"
+	"io/ioutil"
 
 	"github.com/AlcheraInc/gate_match_db/database_manager"
 	"github.com/AlcheraInc/gate_match_db/feature_db"
@@ -21,6 +23,24 @@ func main() {
 		log.Fatalln(err)
 		return
 	}
+
+	imgdata, err := ioutil.ReadFile("/home/magmatart/Alchera/IntegratedFaceServer/testdata/images/feature_test.png")
+	// imgdata, err := ioutil.ReadFile("/home/magmatart/Alchera/IntegratedFaceServer/testdata/images/smlee_1.jpg")
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+
+	featureVector, err := inference.InferenceFeatureAlignedImage(imgdata)
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+
+	for i := range featureVector {
+		fmt.Print(featureVector[i], ", ")
+	}
+	log.Println()
 
 	db, err := newDatabaseConnection()
 	if err != nil {
@@ -53,37 +73,17 @@ func main() {
 	// 	}
 	// }
 
-	// err = featureDB.CreateFeatureRow("Soomin1", fv)
-	// err = featureDB.CreateFeatureRow("Soomin1", fv)
-	// err = featureDB.CreateFeatureRow("Soomin2", fv)
-	// err = featureDB.CreateFeatureRow("Soomin2", fv)
-	// err = featureDB.CreateFeatureRow("Soomin3", fv)
-	// err = featureDB.CreateFeatureRow("Soomin3", fv)
-	// err = featureDB.CreateFeatureRow("Soomin3", fv)
-	// err = featureDB.CreateFeatureRow("Soomin4", fv)
-	// err = featureDB.CreateFeatureRow("Soomin4", fv)
-	// err = featureDB.CreateFeatureRow("Soomin4", fv)
+	// log.Println("Phase 2")
+	// showMemoryDB(featureDB.MemoryDB)
+
+	// err = featureDB.DeleteFeatureRow("Soomin0")
 	// if err != nil {
 	// 	log.Println(err)
 	// 	return
 	// }
 
-	// log.Println("Phase 2")
+	// log.Println("Phase 3")
 	// showMemoryDB(featureDB.MemoryDB)
-
-	// fv := make([]float32, 512)
-	// for k := range fv {
-	// 	fv[k] = 0.5
-	// }
-
-	err = featureDB.DeleteFeatureRow("Soomin0")
-	if err != nil {
-		log.Println(err)
-		return
-	}
-
-	log.Println("Phase 3")
-	showMemoryDB(featureDB.MemoryDB)
 
 	// matchResult, err := featureDB.MatchFeature(fv, 0.2)
 	// if err != nil {
