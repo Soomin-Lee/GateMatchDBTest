@@ -1,4 +1,4 @@
-package migrations
+package feature_db
 
 import (
 	"github.com/AlcheraInc/gate_match_db/entity"
@@ -6,7 +6,7 @@ import (
 	"gopkg.in/gormigrate.v1"
 )
 
-var FeatureDBMigrations = []*gormigrate.Migration{
+var Migrations = []*gormigrate.Migration{
 	{
 		ID: "202012171500",
 		Migrate: func(tx *gorm.DB) (err error) {

@@ -9,7 +9,6 @@ import (
 
 	"github.com/AlcheraInc/gate_match_db/database_manager"
 	"github.com/AlcheraInc/gate_match_db/feature_db"
-	"github.com/AlcheraInc/gate_match_db/migrations"
 	"github.com/AlcheraInc/gate_match_db/registry"
 	"github.com/AlcheraInc/gate_match_db/inference"
 	"github.com/jinzhu/gorm"
@@ -141,6 +140,6 @@ func newDatabaseConnection() (db *gorm.DB, err error) {
 		return
 	}
 
-	err = dbManager.Migrate(migrations.FeatureDBMigrations)
+	err = dbManager.Migrate(feature_db.Migrations)
 	return
 }
