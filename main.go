@@ -9,12 +9,19 @@ import (
 	"github.com/AlcheraInc/gate_match_db/feature_db"
 	"github.com/AlcheraInc/gate_match_db/migrations"
 	"github.com/AlcheraInc/gate_match_db/registry"
+	"github.com/AlcheraInc/gate_match_db/inference"
 	"github.com/jinzhu/gorm"
 )
 
 var dbManager database_manager.DatabaseManager
 
 func main() {
+	err := inference.ConnectInferenceService()
+	if err != nil {
+		log.Fatalln(err)
+		return
+	}
+
 	db, err := newDatabaseConnection()
 	if err != nil {
 		log.Fatalln(err)
@@ -25,33 +32,14 @@ func main() {
 	featureRepository := registry.NewFeatureRepository()
 	featureDB := registry.NewFeatureDB(featureRepository)
 
-	// newFeatureRow := serializer.SejongFeatureDBNew{}
-	// newFeatureRow.Emp_no = "Soomin5"
-	// newFeatureRow.FeatureVector = make([]float32, 512)
-	// for i := range newFeatureRow.FeatureVector {
-	// 	newFeatureRow.FeatureVector[i] = 0.5
-	// }
-
-	// _, err = featureInteractor.CreateFeatureDBRow(newFeatureRow)
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// 	return
-	// }
-
-	// newFeatureRow := serializer.SejongFeatureDBNew{}
-	// newFeatureRow.Emp_no = "Soomin5"
-
-	// err = featureInteractor.Delete(newFeatureRow)
-	// if err != nil {
-	// 	log.Fatalln(err)
-	// 	return
-	// }
-
 	err = featureDB.LoadFeatureDB()
 	if err != nil {
 		log.Println(err)
 		return
 	}
+
+	log.Println("Phase 1")
+	showMemoryDB(featureDB.MemoryDB)
 
 	// for i := 0; i < 10; i++ {
 	// 	fv := make([]float32, 512)
@@ -80,22 +68,22 @@ func main() {
 	// 	return
 	// }
 
-	log.Println("Phase 2")
-	showMemoryDB(featureDB.MemoryDB)
+	// log.Println("Phase 2")
+	// showMemoryDB(featureDB.MemoryDB)
 
-	fv := make([]float32, 512)
-	for k := range fv {
-		fv[k] = 0.5
-	}
-
-	// err = featureDB.DeleteFeatureRow("Soomin2")
-	// if err != nil {
-	// 	log.Println(err)
-	// 	return
+	// fv := make([]float32, 512)
+	// for k := range fv {
+	// 	fv[k] = 0.5
 	// }
 
-	// log.Println("Phase 3")
-	// showMemoryDB(featureDB.MemoryDB)
+	err = featureDB.DeleteFeatureRow("Soomin0")
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println("Phase 3")
+	showMemoryDB(featureDB.MemoryDB)
 
 	// matchResult, err := featureDB.MatchFeature(fv, 0.2)
 	// if err != nil {
@@ -105,14 +93,14 @@ func main() {
 	// log.Println("UID :", matchResult.UID)
 	// log.Println("Distance :", matchResult.Distance)
 
-	matchResult, passedResults, err := featureDB.MatchFeatureAll(fv, 0.2)
-	if err != nil {
-		log.Println(err)
-		return
-	}
-	log.Println("UID :", matchResult.UID)
-	log.Println("Distance :", matchResult.Distance)
-	log.Println("Passed Count :", len(passedResults))
+	// matchResult, passedResults, err := featureDB.MatchFeatureAll(fv, 0.2)
+	// if err != nil {
+	// 	log.Println(err)
+	// 	return
+	// }
+	// log.Println("UID :", matchResult.UID)
+	// log.Println("Distance :", matchResult.Distance)
+	// log.Println("Passed Count :", len(passedResults))
 
 	// for idx := range fr {
 	// 	feature, _ := fr[idx].(serializer.SejongFeatureDBNew)
