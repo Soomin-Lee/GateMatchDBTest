@@ -1,5 +1,11 @@
 cloud.google.com/go v0.26.0/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
 cloud.google.com/go v0.33.1/go.mod h1:aQUYkXzVsufM+DwF1aE+0xfcU+56JwCaLick0ClmMTw=
+github.com/AlcheraInc/GateMatchBase v0.0.0-20210104005055-b636c792afeb h1:ctqDUj0trunz6jO87FIjYSCq3YiUf+C8+9NiwJOlTMk=
+github.com/AlcheraInc/GateMatchBase v0.0.0-20210104005055-b636c792afeb/go.mod h1:N3VMLLjRhnmRX8eVF7BJ+gIK4S/Eddn427n+VKxL96U=
+github.com/AlcheraInc/GateMatchBase v0.0.0-20210104005534-ba5efb7429fa h1:A7WZux8SjL6Js/VwC9vacf2Cr2/IrrT0lLVdxrjooxA=
+github.com/AlcheraInc/GateMatchBase v0.0.0-20210104005534-ba5efb7429fa/go.mod h1:N3VMLLjRhnmRX8eVF7BJ+gIK4S/Eddn427n+VKxL96U=
+github.com/AlcheraInc/InferenceMsg v0.0.0-20201201083327-d555f3362d01 h1:XUSLn9Dv3jI48lT7Nrs4BgzEyQullrJR/KUbRLzNLJg=
+github.com/AlcheraInc/InferenceMsg v0.0.0-20201201083327-d555f3362d01/go.mod h1:hMcrVFUpbV/ifqVsfOacQJWoxDpZU4B8dr/sQGpQ4n0=
 github.com/AlcheraInc/go v0.0.0-20201130060314-41585e1a050a h1:PWqlKizKzEFeY4nQWp/JZ+6bj+40RyC3T4fILFzS+f0=
 github.com/AlcheraInc/go v0.0.0-20201130060314-41585e1a050a/go.mod h1:ChMaPODYbndQtKxXy8X7nrkRU4Ofws49XTxzoJjKk1E=
 github.com/BurntSushi/toml v0.3.1/go.mod h1:xHWCNGjB5oqiDr8zfno3MHue2Ht5sIBksp03qcyfWMU=

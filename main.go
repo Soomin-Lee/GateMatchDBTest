@@ -2,15 +2,15 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"strconv"
-	"io/ioutil"
 
-	"github.com/AlcheraInc/gate_match_db/database_manager"
-	"github.com/AlcheraInc/gate_match_db/feature_db"
-	"github.com/AlcheraInc/gate_match_db/registry"
-	"github.com/AlcheraInc/gate_match_db/inference"
+	"github.com/AlcheraInc/GateMatchBase/database_manager"
+	"github.com/AlcheraInc/GateMatchBase/feature_db"
+	"github.com/AlcheraInc/GateMatchBase/inference"
+	"github.com/AlcheraInc/GateMatchBase/registry"
 	"github.com/jinzhu/gorm"
 )
 
@@ -23,7 +23,7 @@ func main() {
 		return
 	}
 
-	imgdata, err := ioutil.ReadFile("/home/magmatart/Alchera/IntegratedFaceServer/testdata/images/feature_test.png")
+	imgdata, err := ioutil.ReadFile("/home/leesoomin/dev/SolutionTeam/IntegratedFaceServer/testdata/images/feature_test.png")
 	// imgdata, err := ioutil.ReadFile("/home/magmatart/Alchera/IntegratedFaceServer/testdata/images/smlee_1.jpg")
 	if err != nil {
 		log.Fatalln(err)
@@ -58,6 +58,15 @@ func main() {
 	}
 
 	log.Println("Phase 1")
+	showMemoryDB(featureDB.MemoryDB)
+
+	err = featureDB.CreateFeatureRow("RealFeature", featureVector)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+
+	log.Println("Input Complete")
 	showMemoryDB(featureDB.MemoryDB)
 
 	// for i := 0; i < 10; i++ {
